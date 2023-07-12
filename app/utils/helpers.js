@@ -6,16 +6,9 @@ export const priceFormatter = (price) => {
    return (
       formattedPrice[0] + "." + rounded.toString()
    )
-}
-
-export async function getData() {
-   const res = await fetch(
-      "https://api.coindesk.com/v1/bpi/currentprice.json"
-   )
-
-   if (!res) {
-      throw new Error("Failed to fetch data")
    }
 
-   return res.json()
-}
+   export const calculateChange = (previous, current) => {
+    const change = ((current - previous) / previous) * 100
+    return change
+   }
