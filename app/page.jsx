@@ -1,7 +1,9 @@
 "use client"
 import { useEffect, useState } from "react"
+import { useRouter } from 'next/navigation'
 import CurrencySymbol from "./components/CurrencySymbol"
 import SelectList from "./components/SelectList"
+import Button from "./components/Button"
 import {
    priceFormatter,
    calculateChange
@@ -18,12 +20,13 @@ export default function Home() {
       useState(0)
     const [pulse, setPulse] = useState(false)
 
+    const router = useRouter()
+
    function handleNewInterval(newInterval) {
     setIntervalValue(newInterval * 1000)
    } 
 
    function getData() {
-    console.log('fetching data...')
       const path =
          "https://api.coindesk.com/v1/bpi/currentprice.json"
       fetch(path)
@@ -91,22 +94,22 @@ export default function Home() {
    return (
       <main>
          <div>
-            <h4 className={pulse && `animate-pulse`}>
+            <h4 className={pulse ? `animate-pulse` : ''}>
                <CurrencySymbol
                   htmlSymbol={data.bpi.USD.symbol}
                />
                {priceFormatter(data.bpi.USD.rate)}
                &nbsp;
-               <span className={currentColor}>{changePercentage > 0 && '+'}{changePercentage}%</span>
+               <span className={currentColor}>{changePercentage > 0 ? '+' : ''}{changePercentage}%</span>
             </h4>
-            <h4 className={pulse && `animate-pulse`}>
+            <h4 className={pulse ? `animate-pulse` : ''}>
                <br />
                <CurrencySymbol
                   htmlSymbol={data.bpi.GBP.symbol}
                />
                {priceFormatter(data.bpi.GBP.rate)}
             </h4>
-            <h4 className={pulse && `animate-pulse`}>
+            <h4 className={pulse ? `animate-pulse` : ''}>
                <br />
                <CurrencySymbol
                   htmlSymbol={data.bpi.EUR.symbol}
@@ -116,6 +119,9 @@ export default function Home() {
          </div>
          <div>
           <SelectList interval={intervalValue} changeInterval={handleNewInterval}/>
+         </div>
+         <div>
+            <Button text='NFTs' onClick={() => router.push('/nfts')} />
          </div>
       </main>
    )
